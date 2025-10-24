@@ -1,81 +1,391 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>MIST</title>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apoorv Bhardwaj - My Todo List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* my custom styles */
+        body {
+            font-family: Arial;
+            background-color: #0a1f0a;
+            min-height: 100vh;
+        }
+        
+        .box {
+            background-color: #1a3a1a;
+            border: 2px solid #2d5a2d;
+            padding: 20px;
+        }
+        
+        .calendar-box {
+            cursor: pointer;
+            background-color: #1a3a1a;
+            border: 2px solid #2d5a2d;
+            width: 100%;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #a8d5a8;
+        }
+        
+        .calendar-box:hover {
+            background-color: #2d5a2d;
+            border-color: #4ade80;
+        }
+        
+        .today-box {
+            border: 3px solid #22c55e !important;
+            font-weight: bold;
+        }
+        
+        .selected-box {
+            background-color: #22c55e !important;
+            color: black !important;
+            font-weight: bold;
+        }
+        
+        .has-tasks-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #fbbf24;
+            margin-top: 5px;
+        }
+        
+        .task-box {
+            background-color: #1a3a1a;
+            border: 2px solid #2d5a2d;
+            border-left: 5px solid #22c55e;
+            padding: 10px;
+            margin-bottom: 10px;
+            color: #d1fad1;
+        }
+        
+        .task-box:hover {
+            background-color: #2d5a2d;
+        }
+        
+        .green-button {
+            background-color: #22c55e;
+            color: black;
+            padding: 12px 24px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .green-button:hover {
+            background-color: #4ade80;
+        }
+        
+        .red-button {
+            background-color: #ef4444;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .red-button:hover {
+            background-color: #dc2626;
+        }
+        
+        .input-box {
+            background-color: #1a3a1a;
+            border: 2px solid #2d5a2d;
+            color: #d1fad1;
+            padding: 12px;
+            width: 100%;
+        }
+        
+        .input-box:focus {
+            border-color: #22c55e;
+            outline: none;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-    <div class="box-1">
-        <h1>APOORV BHARDWAJ</h1>
-
-        <p>
-            “If I lack even this bit of ambition, what’s the point of being human? Failure is fine, just try again several times. Even if I cannot achieve my goals in the end, so what?” -Fang Yuan
-        </p>
-    </div>
-    <br>
-    <br>
-    <div class="card">
-        <img src="images/mit.png" alt="mit manipal">
-        <div class="text">
-        <h2>I study at Manipal Institute of Technology</h2>
-        <p>
-            I am a student of the computer science department at MIT Manipal. I am currently in semester 1. The Manipal Institute of Technology (MIT), Manipal was established in 1957 as one of the first self-financing engineering colleges in the country.
-        </p>
-        </div>
-    </div>
-    <br><br>
-    <div class="card">
-        <img src="images/mist.png" alt="mist manipal">
-        <div class="text">
-        <h2>Manipal Information Security Team</h2>
-        <p>
-            This project is being facilitated by mist by giving me resources and a timeline. It curbs my procrastination while motivating and guiding me in the path to web developement.
-        </p>
-        </div>
-    </div>
-    <div class="box-2">
-        <h1>College life for me</h1>
-        <p>
-            So far it has been a couple of months, and genuinely I can almost find nothing bad to talk about this college.. except myself. My sleep schedule and my procrastination both have taken a turn for the worse. Gotta improve that asap. Also I dont think anyone will read this, so I am just writing anything at this point just so the website looks kinda full. I will write the last few lines properly, the content can be anything right. There is a blue coloured bottle infront of me that has water. My roommate has gone to "his home town and that's great fr. So manipal has been till now a good experience. Hope to turn it to the superlative degree.
-            <br>
-            <a href="">read more</a>
-        </p>"
-    </div>
-    <div class="categories">
-        <h2>UseFull Links</h2>
+    <div style="max-width: 1200px; margin: 0 auto; padding: 30px;">
         
-        <u1>
-            <li><a href="https://maheslcm.manipal.edu/" target="_blank">SLCM</a></li>
-            <li><a href="https://lms.manipal.edu/d2l/login">LMS</a></li>
-            <li><a href="https://lighthouse.manipal.edu/d2l/login">LightHouse</a></li>
-        </u1>
+        <!-- header section -->
+        <div class="box" style="text-align: center; margin-bottom: 30px;">
+            <h1 style="font-size: 40px; color: #22c55e; margin-bottom: 10px;">
+                Apoorv Bhardwaj Todo List
+            </h1>
+            <p style="color: #a8d5a8; font-size: 18px;">my personal task manager</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px;">
+            
+            <!-- calendar part -->
+            <div class="box">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <button class="green-button" onclick="prevMonth()">PREVIOUS</button>
+                    <h2 id="monthDisplay" style="color: #22c55e; font-size: 28px; font-weight: bold;"></h2>
+                    <button class="green-button" onclick="nextMonth()">NEXT</button>
+                </div>
+
+                <!-- days of week -->
+                <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-bottom: 10px;">
+                    <div style="text-align: center; color: #22c55e; font-weight: bold; padding: 10px;">SUN</div>
+                    <div style="text-align: center; color: #22c55e; font-weight: bold; padding: 10px;">MON</div>
+                    <div style="text-align: center; color: #22c55e; font-weight: bold; padding: 10px;">TUE</div>
+                    <div style="text-align: center; color: #22c55e; font-weight: bold; padding: 10px;">WED</div>
+                    <div style="text-align: center; color: #22c55e; font-weight: bold; padding: 10px;">THU</div>
+                    <div style="text-align: center; color: #22c55e; font-weight: bold; padding: 10px;">FRI</div>
+                    <div style="text-align: center; color: #22c55e; font-weight: bold; padding: 10px;">SAT</div>
+                </div>
+                
+                <!-- calendar days -->
+                <div id="calendarGrid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px;"></div>
+                
+                <!-- legend -->
+                <div style="margin-top: 20px; padding: 15px; background-color: #0f2a0f; border: 2px solid #2d5a2d;">
+                    <p style="color: #a8d5a8; font-size: 14px;">
+                        <span style="display: inline-block; width: 15px; height: 15px; background-color: #22c55e; margin-right: 5px;"></span> = today
+                        <span style="display: inline-block; width: 15px; height: 15px; background-color: #fbbf24; margin-left: 20px; margin-right: 5px;"></span> = has tasks
+                    </p>
+                </div>
+            </div>
+
+            <!-- todo list part -->
+            <div class="box">
+                <h2 style="color: #22c55e; font-size: 24px; font-weight: bold; margin-bottom: 5px;">TASKS</h2>
+                <p id="dateDisplay" style="color: #a8d5a8; font-size: 14px; margin-bottom: 20px;"></p>
+                
+                <!-- add task input -->
+                <div style="margin-bottom: 20px;">
+                    <input type="text" id="taskInput" class="input-box" placeholder="type your task here..." 
+                           onkeypress="if(event.key === 'Enter') addTask()">
+                    <button class="green-button" onclick="addTask()" style="width: 100%; margin-top: 10px;">
+                        ADD TASK
+                    </button>
+                </div>
+
+                <!-- tasks will show here -->
+                <div id="tasksList" style="max-height: 400px; overflow-y: auto;"></div>
+                
+                <!-- task counter -->
+                <div id="taskCounter" style="text-align: center; margin-top: 20px; color: #a8d5a8; font-size: 14px;"></div>
+            </div>
+        </div>
     </div>
 
-    <br>
-    <div class="idk">
-    <h1>FEEDBACK FORM</h1>
+    <script>
+        // my variables
+        var month = new Date().getMonth();
+        var year = new Date().getFullYear();
+        var selectedDay = new Date();
+        var todayDate = new Date();
+        var allTasks = {};
 
-    <form class="myform">
-        <div class="form-group">
-            <label>Name: </label>
-            <input type="text" name="name">
-        </div>
-        <div class="form-group">
-            <label>Email: </label>
-            <input type="email" name="email">
-        </div>
-        <div class="form-group">
-            <label>Message: </label>
-            <textarea name=""message></textarea>
-        </div>
-        <input class="button" type="submit" value="submit" name="">
-    </form>
-    </div>
+        // start everything
+        function start() {
+            showCalendar();
+            showDate();
+            showTasks();
+        }
 
-    </div><!--container ends here-->
+        // function to show calendar
+        function showCalendar() {
+            var months = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
+                         "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
+            
+            document.getElementById('monthDisplay').innerHTML = months[month] + ' ' + year;
+            
+            var firstDayOfMonth = new Date(year, month, 1).getDay();
+            var totalDays = new Date(year, month + 1, 0).getDate();
+            
+            var html = '';
+            
+            // empty boxes before month starts
+            for (var i = 0; i < firstDayOfMonth; i++) {
+                html += '<div></div>';
+            }
+            
+            // actual days
+            for (var day = 1; day <= totalDays; day++) {
+                var dateKey = year + '-' + (month + 1) + '-' + day;
+                
+                var isTodayDay = (day === todayDate.getDate() && 
+                                 month === todayDate.getMonth() && 
+                                 year === todayDate.getFullYear());
+                
+                var isSelectedDay = (day === selectedDay.getDate() && 
+                                    month === selectedDay.getMonth() && 
+                                    year === selectedDay.getFullYear());
+                
+                var hasTasks = allTasks[dateKey] && allTasks[dateKey].length > 0;
+                
+                var classes = 'calendar-box';
+                if (isTodayDay) classes += ' today-box';
+                if (isSelectedDay) classes += ' selected-box';
+                
+                var taskDot = '';
+                if (hasTasks && !isSelectedDay) {
+                    taskDot = '<div class="has-tasks-dot"></div>';
+                }
+                
+                html += '<div class="' + classes + '" onclick="pickDay(' + day + ')">' + 
+                       '<div style="font-size: 22px;">' + day + '</div>' +
+                       taskDot +
+                       '</div>';
+            }
+            
+            document.getElementById('calendarGrid').innerHTML = html;
+        }
 
-    <footer id="footerm">
-        <p>Made with ❤️ by Apoorv Bhardwaj</p>
-    </footer>
+        // go to previous month
+        function prevMonth() {
+            month = month - 1;
+            if (month < 0) {
+                month = 11;
+                year = year - 1;
+            }
+            showCalendar();
+        }
+
+        // go to next month
+        function nextMonth() {
+            month = month + 1;
+            if (month > 11) {
+                month = 0;
+                year = year + 1;
+            }
+            showCalendar();
+        }
+
+        // when user clicks a day
+        function pickDay(day) {
+            selectedDay = new Date(year, month, day);
+            showCalendar();
+            showDate();
+            showTasks();
+        }
+
+        // show the selected date
+        function showDate() {
+            var months = ["January", "February", "March", "April", "May", "June",
+                         "July", "August", "September", "October", "November", "December"];
+            var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            
+            var text = days[selectedDay.getDay()] + ', ' + 
+                      months[selectedDay.getMonth()] + ' ' + 
+                      selectedDay.getDate() + ', ' + 
+                      selectedDay.getFullYear();
+            
+            document.getElementById('dateDisplay').innerHTML = text;
+        }
+
+        // get key for storing tasks
+        function getKey() {
+            return selectedDay.getFullYear() + '-' + 
+                   (selectedDay.getMonth() + 1) + '-' + 
+                   selectedDay.getDate();
+        }
+
+        // add new task
+        function addTask() {
+            var input = document.getElementById('taskInput');
+            var taskText = input.value;
+            
+            // check if empty
+            if (taskText === '' || taskText === null) {
+                alert('please type a task first!');
+                return;
+            }
+            
+            var key = getKey();
+            
+            // create array if not exists
+            if (!allTasks[key]) {
+                allTasks[key] = [];
+            }
+            
+            // add task
+            allTasks[key].push({
+                text: taskText,
+                done: false
+            });
+            
+            input.value = '';
+            showCalendar();
+            showTasks();
+        }
+
+        // show all tasks for selected day
+        function showTasks() {
+            var key = getKey();
+            var list = document.getElementById('tasksList');
+            
+            // no tasks
+            if (!allTasks[key] || allTasks[key].length === 0) {
+                list.innerHTML = '<div style="text-align: center; padding: 50px;">' +
+                                '<div style="font-size: 50px; margin-bottom: 10px;">📝</div>' +
+                                '<p style="color: #a8d5a8;">no tasks yet</p>' +
+                                '<p style="color: #6b8e6b; font-size: 12px;">add one above</p>' +
+                                '</div>';
+                document.getElementById('taskCounter').innerHTML = '';
+                return;
+            }
+            
+            var html = '';
+            var doneCount = 0;
+            
+            // loop through tasks
+            for (var i = 0; i < allTasks[key].length; i++) {
+                var task = allTasks[key][i];
+                
+                if (task.done === true) {
+                    doneCount = doneCount + 1;
+                }
+                
+                var checked = '';
+                if (task.done === true) {
+                    checked = 'checked';
+                }
+                
+                var textStyle = '';
+                if (task.done === true) {
+                    textStyle = 'text-decoration: line-through; color: #6b8e6b;';
+                }
+                
+                html += '<div class="task-box" style="display: flex; justify-content: space-between; align-items: center;">' +
+                       '<div style="display: flex; align-items: center; flex: 1;">' +
+                       '<input type="checkbox" ' + checked + ' onchange="checkTask(' + i + ')" style="margin-right: 10px; width: 18px; height: 18px;">' +
+                       '<span style="' + textStyle + '">' + task.text + '</span>' +
+                       '</div>' +
+                       '<button class="red-button" onclick="deleteTask(' + i + ')">DELETE</button>' +
+                       '</div>';
+            }
+            
+            list.innerHTML = html;
+            
+            var total = allTasks[key].length;
+            var emoji = '';
+            if (doneCount === total && total > 0) {
+                emoji = ' 🎉';
+            }
+            document.getElementById('taskCounter').innerHTML = doneCount + ' of ' + total + ' done' + emoji;
+        }
+
+        function checkTask(index) {
+            var key = getKey();
+            allTasks[key][index].done = !allTasks[key][index].done;
+            showTasks();
+        }
+
+        function deleteTask(index) {
+            var key = getKey();
+            allTasks[key].splice(index, 1);
+            showCalendar();
+            showTasks();
+        }
+
+        start();
+    </script>
 </body>
 </html>
